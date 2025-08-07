@@ -7,6 +7,7 @@ export function Home() {
         <HomeContainer>
             <HeroSection />
             <h1>aaaaaaaa</h1>
+            <HeroSection />
         </HomeContainer>
     )
 }
