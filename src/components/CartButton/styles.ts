@@ -20,6 +20,10 @@ const buttonVariants = {
 
 export const CartButtonContainer = styled.button<CartButtonContainerProps>`
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     border: 0;
     padding: 0.5rem;
     border-radius: 6px;
