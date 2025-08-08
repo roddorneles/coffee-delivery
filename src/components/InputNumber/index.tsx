@@ -1,18 +1,24 @@
 import { Minus, Plus } from "phosphor-react";
 import { InputNumberContainer } from "./style";
 
-export function InputNumber() {
+interface InputNumberProps {
+    number: number,
+    onPlus: () => void,
+    onMinus: () => void
+}
+
+export function InputNumber({ number, onMinus, onPlus }: InputNumberProps) {
 
     return (
         <InputNumberContainer>
 
-            <button>
+            <button onClick={onMinus}>
                 <Minus size={16} />
             </button>
 
-            <span>1</span>
+            <span>{number}</span>
 
-            <button>
+            <button onClick={onPlus}>
                 <Plus size={16} />
             </button>
 

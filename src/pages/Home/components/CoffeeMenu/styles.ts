@@ -16,7 +16,6 @@ export const CoffeesCatalogContainer = styled.div`
     
     display: flex;
     gap: 2rem;
-    align-items: center;
     flex-wrap: wrap;
 
 `

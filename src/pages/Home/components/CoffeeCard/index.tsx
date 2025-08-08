@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { CartButton } from "../../../../components/CartButton";
 import { InputNumber } from "../../../../components/InputNumber";
 import { CoffeeCardContainer, CoffeeCategoriesContainer, CoffeeCategory, PriceCoffeeCard } from "./styles"
 
 interface CoffeeCardProps {
+    id: string
     name: string,
     description: string,
     price: number,
@@ -10,7 +12,22 @@ interface CoffeeCardProps {
     image: string
 }
 
-export function CoffeeCard({ name, description, price, categories, image }: CoffeeCardProps) {
+export function CoffeeCard({ name, description, price, categories, image, id }: CoffeeCardProps) {
+
+    const [amount, setAmount] = useState(1);
+
+    function increaseAmount() {
+        setAmount((amount) => amount + 1)
+    }
+
+    function decreaseAmount() {
+        setAmount((amount) => {
+            if (amount <= 1) {
+                return 1;
+            }
+            return amount - 1
+        })
+    }
 
     const coffeeImage = new URL(`../../../../assets/${image}`, import.meta.url).href;
 
@@ -34,13 +51,11 @@ export function CoffeeCard({ name, description, price, categories, image }: Coff
                         <span className="coffee-price">{price}</span>
                     </div>
                     <div className="amount-and-cart">
-                        <InputNumber />
+                        <InputNumber number={amount} onMinus={decreaseAmount} onPlus={increaseAmount} />
                         <CartButton $variant="purple" />
                     </div>
                 </div>
             </PriceCoffeeCard>
-
-
         </CoffeeCardContainer>
     )
 
