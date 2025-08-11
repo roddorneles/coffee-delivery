@@ -25,6 +25,28 @@ export const HeaderContent = styled.div`
         gap: 0.75rem;
     }
 
+`
+
+export const AmountInCartContainer = styled.span`
+
+    position: absolute;
+    right: -10px;
+    top: -10px;
+
+    min-width: 1.2rem;
+    height: 1.25rem;
+    padding-inline: 0.4rem; /* aumenta largura conforme texto cresce */
+
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: ${props => props.theme["white"]};
+    border-radius: 50%;
+    background-color: ${props => props.theme["yellow-dark"]};
 
 `
 

@@ -20,6 +20,8 @@ const buttonVariants = {
 
 export const CartButtonContainer = styled.button<CartButtonContainerProps>`
 
+    position: relative;
+
     display: flex;
     align-items: center;
     justify-content: center;
