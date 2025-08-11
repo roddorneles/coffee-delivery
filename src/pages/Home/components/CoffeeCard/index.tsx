@@ -1,18 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { CartButton } from "../../../../components/CartButton";
 import { InputNumber } from "../../../../components/InputNumber";
 import { CoffeeCardContainer, CoffeeCategoriesContainer, CoffeeCategory, PriceCoffeeCard } from "./styles"
+import { CartContext, type Coffee } from "../../../../contexts/CartContext";
 
 interface CoffeeCardProps {
-    id: string
-    name: string,
-    description: string,
-    price: number,
-    categories: string[]
-    image: string
+    coffee: Coffee
 }
 
-export function CoffeeCard({ name, description, price, categories, image, id }: CoffeeCardProps) {
+export function CoffeeCard({ coffee }: CoffeeCardProps) {
+
+    const { name, description, price, categories, image, id } = coffee;
+
+    const { coffeesInCart, addCoffeeToCart } = useContext(CartContext);
 
     const [amount, setAmount] = useState(1);
 
@@ -27,6 +27,11 @@ export function CoffeeCard({ name, description, price, categories, image, id }: 
             }
             return amount - 1
         })
+    }
+
+    function handleAddCoffeToCart() {
+        addCoffeeToCart(coffee, amount);
+        setAmount(1);
     }
 
     const coffeeImage = new URL(`../../../../assets/${image}`, import.meta.url).href;
@@ -52,7 +57,7 @@ export function CoffeeCard({ name, description, price, categories, image, id }: 
                     </div>
                     <div className="amount-and-cart">
                         <InputNumber number={amount} onMinus={decreaseAmount} onPlus={increaseAmount} />
-                        <CartButton $variant="purple" />
+                        <CartButton $variant="purple" onClick={handleAddCoffeToCart} />
                     </div>
                 </div>
             </PriceCoffeeCard>

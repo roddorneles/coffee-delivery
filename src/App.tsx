@@ -6,7 +6,7 @@ import { Header } from './components/Header'
 import { DefaultLayout } from './layouts/DefaultLayout'
 import { BrowserRouter } from 'react-router-dom'
 import { Router } from './Router'
-
+import { CartContextProvider } from './contexts/CartContext'
 
 export function App() {
 
@@ -14,7 +14,9 @@ export function App() {
 
     <ThemeProvider theme={defaultTheme}>
       <BrowserRouter>
-        <Router />
+        <CartContextProvider>
+          <Router />
+        </CartContextProvider>
       </BrowserRouter>
       <GlobalStyle />
     </ThemeProvider>

@@ -1,6 +1,8 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { Coffee } from "phosphor-react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { coffees } from "../pages/Home/components/CoffeeMenu";
 
-interface Coffee {
+export interface Coffee {
     id: string
     name: string,
     description: string,
@@ -9,13 +11,14 @@ interface Coffee {
     image: string
 }
 
-interface ManageCoffeeData {
-    coffeeId: string,
+interface ItemInCartData {
+    coffee: Coffee,
     amount: number
 }
 
 interface CartContextType {
-    coffeesList: Coffee[]
+    coffeesInCart: ItemInCartData[]
+    addCoffeeToCart: (coffee: Coffee, amount: number) => any
 }
 
 export const CartContext = createContext({} as CartContextType)
@@ -26,13 +29,43 @@ interface CartContextProps {
 
 export function CartContextProvider({ children }: CartContextProps) {
 
-    // const [coffeesInCart, setCoffeesInCart] = useState([]);
+    const [coffeesInCart, setCoffeesInCart] = useState<ItemInCartData[]>([]);
 
-    // function addCoffeeToCart(coffee: Coffee, amount: number) {
+    useEffect(() => {
+        console.log(coffeesInCart)
+    }, [coffeesInCart]);
 
-    // }
+    function addCoffeeToCart(newCoffee: Coffee, amount: number) {
+
+        const coffeeAddedId = coffeesInCart.findIndex((item) => item.coffee.id === newCoffee.id);
+
+        if (coffeeAddedId < 0) {
+            setCoffeesInCart((items) => {
+                return [...items, { coffee: newCoffee, amount }]
+            })
+        }
+        else {
+            setCoffeesInCart((items) => {
+                return items.map((item) => {
+
+                    if (item.coffee.id === newCoffee.id) {
+                        return {
+                            coffee: {
+                                ...item.coffee
+                            },
+                            amount: item.amount + amount
+                        }
+                    }
+                    return item;
+                })
+            });
+        }
+
+    }
 
     return (
-        <h1>oi</h1>
+        <CartContext.Provider value={{ coffeesInCart, addCoffeeToCart }}>
+            {children}
+        </CartContext.Provider>
     )
 }
