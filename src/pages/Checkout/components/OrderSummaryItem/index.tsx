@@ -1,7 +1,9 @@
 import { InputNumber } from "../../../../components/InputNumber";
 import { DeleteItemButton } from "../DeleteItemButton";
 import { OrderSummaryItemContainer, OrderSummaryItemAmountContainer } from "./style";
-import type { Coffee } from "../../../../contexts/CartContext";
+import { CartContext, type Coffee } from "../../../../contexts/CartContext";
+import { formatPrice } from "../../../../utils/formatPrice";
+import { useContext } from "react";
 
 interface OrderSummaryItemProps {
     coffee: Coffee,
@@ -10,11 +12,17 @@ interface OrderSummaryItemProps {
 
 export function OrderSummaryItem({ coffee, amount }: OrderSummaryItemProps) {
 
-    function funcao() {
-        console.log("a");
-    }
+    const { addOneCoffeeToCart, removeOneCoffeeFromCart, } = useContext(CartContext);
 
     const coffeeImage = new URL(`../../../../assets/${coffee.image}`, import.meta.url).href;
+
+    function removeCoffee() {
+        removeOneCoffeeFromCart(coffee.id);
+    }
+
+    function addCoffee() {
+        addOneCoffeeToCart(coffee.id);
+    }
 
     return (
         <OrderSummaryItemContainer>
@@ -22,11 +30,11 @@ export function OrderSummaryItem({ coffee, amount }: OrderSummaryItemProps) {
             <OrderSummaryItemAmountContainer>
                 <span>{coffee.name}</span>
                 <div className="buttons">
-                    <InputNumber number={amount} onMinus={funcao} onPlus={funcao} />
+                    <InputNumber number={amount} onMinus={removeCoffee} onPlus={addCoffee} />
                     <DeleteItemButton />
                 </div>
             </OrderSummaryItemAmountContainer>
-            <span className="coffee-price">R$ {coffee.price}</span>
+            <span className="coffee-price">R$  {formatPrice(coffee.price * amount)} </span>
         </OrderSummaryItemContainer>
     )
 

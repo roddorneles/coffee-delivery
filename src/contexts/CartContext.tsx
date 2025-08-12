@@ -17,8 +17,10 @@ interface ItemInCartData {
 }
 
 interface CartContextType {
-    coffeesInCart: ItemInCartData[]
-    addCoffeeToCart: (coffee: Coffee, amount: number) => any
+    coffeesInCart: ItemInCartData[],
+    addCoffeeToCart: (coffee: Coffee, amount: number) => void,
+    removeOneCoffeeFromCart: (coffeeId: string) => void,
+    addOneCoffeeToCart: (coffeeId: string) => void
 }
 
 export const CartContext = createContext({} as CartContextType)
@@ -35,7 +37,53 @@ export function CartContextProvider({ children }: CartContextProps) {
         console.log(coffeesInCart)
     }, [coffeesInCart]);
 
-    function addCoffeeToCart(newCoffee: Coffee, amount: number) {
+    function removeOneCoffeeFromCart(coffeeId: string) {
+        setCoffeesInCart((items) => {
+            return items.map((item) => {
+
+                if (item.coffee.id === coffeeId) {
+
+                    if (item.amount <= 1) {
+                        return {
+                            coffee: {
+                                ...item.coffee
+                            },
+                            amount: 1
+                        }
+                    }
+                    else {
+                        return {
+                            coffee: {
+                                ...item.coffee
+                            },
+                            amount: item.amount - 1
+                        }
+                    }
+
+                }
+                return item;
+            })
+        });
+    }
+
+    function addOneCoffeeToCart(coffeeId: string) {
+        setCoffeesInCart((items) => {
+            return items.map((item) => {
+
+                if (item.coffee.id === coffeeId) {
+                    return {
+                        coffee: {
+                            ...item.coffee
+                        },
+                        amount: item.amount + 1
+                    }
+                }
+                return item;
+            })
+        });
+    }
+
+    function addCoffeesToCart(newCoffee: Coffee, amount: number) {
 
         const coffeeAddedId = coffeesInCart.findIndex((item) => item.coffee.id === newCoffee.id);
 
@@ -64,7 +112,7 @@ export function CartContextProvider({ children }: CartContextProps) {
     }
 
     return (
-        <CartContext.Provider value={{ coffeesInCart, addCoffeeToCart }}>
+        <CartContext.Provider value={{ coffeesInCart, addCoffeeToCart: addCoffeesToCart, removeOneCoffeeFromCart, addOneCoffeeToCart }}>
             {children}
         </CartContext.Provider>
     )
