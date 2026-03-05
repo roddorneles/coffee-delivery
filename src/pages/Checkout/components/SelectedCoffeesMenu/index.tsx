@@ -4,7 +4,7 @@ import { DeleteItemButton } from "../DeleteItemButton";
 import { OrderSummaryItem } from "../OrderSummaryItem";
 import { useContext } from "react";
 import { CartContext } from "../../../../contexts/CartContext";
-import { coffees } from "../../../Home/components/CoffeeMenu"; // lookup by id
+import { coffees } from "../../../Home/components/CoffeeMenu";
 import { formatPrice } from "../../../../utils/formatPrice";
 import { useFormContext } from "react-hook-form";
 

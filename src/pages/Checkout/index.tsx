@@ -7,8 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext } from "react";
 import { CartContext } from "../../contexts/CartContext";
 
+const cepRegex = /^\d{5}-?\d{3}$/;
+
 const finishOrderFormSchema = zod.object({
-    cep: zod.string().min(1),
+    cep: zod.string()
+        .min(1, "CEP obrigatório")
+        .regex(cepRegex, "CEP inválido"),
     street: zod.string().min(1),
     number: zod.number().positive(),
     complement: zod.string().optional(),
@@ -31,13 +35,13 @@ export function Checkout() {
 
     function handleFinishOrder(data: FinishOrderFormData) {
 
-        if (coffeesInCart.length === 0) {
-            console.log("erro de carrinho")
-            return;
-        }
+        // if (coffeesInCart.length === 0) {
+        //     console.log("erro de carrinho")
+        //     return;
+        // }
 
-        const payload = { ...data, items: coffeesInCart };
-        console.log(payload);
+        // const payload = { ...data, items: coffeesInCart };
+        console.log(data);
 
     }
 

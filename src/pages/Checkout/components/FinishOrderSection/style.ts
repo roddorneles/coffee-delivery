@@ -1,6 +1,7 @@
 
 import { CurrencyDollar, MapPinLine } from "phosphor-react";
 import styled from "styled-components";
+import { IMaskInput } from "react-imask";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 
 export const FinishOrderSectionContainer = styled.div`
@@ -114,6 +115,28 @@ export const BaseInput = styled.input`
 
     }
 `
+export const CepMaskedInput = styled(IMaskInput)`
+    background-color: ${props => props.theme["base-input"]};
+    height: 2.625rem;
+    border: 1px solid ${props => props.theme["base-button"]};
+    border-radius: 4px;
+    color: ${props => props.theme["base-text"]};
+    font-size: 0.875rem;
+    padding: 0.75rem;
+    font-family: "Roboto";
+    width: 100%;
+
+    &:focus{
+        box-shadow: none;
+        border-color: ${props => props.theme["yellow-dark"]};
+    }
+
+    &::placeholder{
+        color: ${props => props.theme["base-label"]};
+
+    }
+`;
+
 export const PaymentMethod = styled(RadioGroup.Root)`
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));

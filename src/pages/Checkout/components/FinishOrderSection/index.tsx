@@ -1,10 +1,34 @@
 import { Bank, CreditCard, Money } from "phosphor-react";
-import { FinishOrderSectionBoxContainer, BaseInput, FinishOrderSectionContainer, PinIcon, CoinIcon, PaymentMethod, PaymentMethodButton } from "./style";
+import { FinishOrderSectionBoxContainer, BaseInput, FinishOrderSectionContainer, PinIcon, CoinIcon, PaymentMethod, PaymentMethodButton, CepMaskedInput } from "./style";
 import { Controller, useFormContext } from "react-hook-form";
+import { viaCepApi } from "../../../../lib/viaCep";
+import { useEffect } from "react";
 
 export function FinishOrderSection() {
 
-    const { register, control } = useFormContext();
+    const { register, control, watch, setValue } = useFormContext();
+    const cep = watch("cep");
+
+    useEffect(() => {
+        if (cep && cep.replace(/\D/g, '').length === 8) {
+            const timeout = setTimeout(() => {
+                findAddress();
+            }, 500);
+            return () => clearTimeout(timeout);
+        }
+    }, [cep])
+
+    async function findAddress() {
+
+        const { data } = await viaCepApi.get(`${cep}/json`);
+
+        const { bairro: district, uf, localidade: city, logradouro: street } = data;
+
+        setValue("street", street);
+        setValue("district", district);
+        setValue("city", city);
+        setValue("uf", uf);
+    }
 
     return (
         <FinishOrderSectionContainer>
@@ -21,11 +45,21 @@ export function FinishOrderSection() {
                 </div>
 
                 <div className="inputs-section">
-                    <BaseInput
-                        type="text"
-                        placeholder="CEP"
-                        id="cep"
-                        {...register('cep')}
+
+                    <Controller
+                        name="cep"
+                        control={control}
+                        render={(props) => {
+                            return (
+                                <CepMaskedInput
+                                    {...props.field}
+                                    placeholder="CEP"
+                                    mask="00000-000"
+                                    onAccept={props.field.onChange}
+                                    onBlur={findAddress}
+                                />
+                            );
+                        }}
                     />
 
                     <BaseInput
