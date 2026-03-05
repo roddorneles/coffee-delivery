@@ -1,7 +1,10 @@
 import { Bank, CreditCard, Money } from "phosphor-react";
 import { FinishOrderSectionBoxContainer, BaseInput, FinishOrderSectionContainer, PinIcon, CoinIcon, PaymentMethod, PaymentMethodButton } from "./style";
+import { Controller, useFormContext } from "react-hook-form";
 
 export function FinishOrderSection() {
+
+    const { register, control } = useFormContext();
 
     return (
         <FinishOrderSectionContainer>
@@ -22,42 +25,49 @@ export function FinishOrderSection() {
                         type="text"
                         placeholder="CEP"
                         id="cep"
+                        {...register('cep')}
                     />
 
                     <BaseInput
                         type="text"
                         placeholder="Rua"
                         id="street"
+                        {...register("street")}
                     />
 
                     <BaseInput
                         type="number"
                         placeholder="Número"
                         id="number"
+                        {...register("number", { valueAsNumber: true })}
                     />
 
                     <BaseInput
                         type="text"
                         placeholder="Complemento"
                         id="complement"
+                        {...register("complement")}
                     />
 
                     <BaseInput
                         type="text"
                         placeholder="Bairro"
                         id="district"
+                        {...register("district")}
                     />
 
                     <BaseInput
                         type="text"
                         placeholder="Cidade"
                         id="city"
+                        {...register("city")}
                     />
 
                     <BaseInput
                         type="text"
                         placeholder="UF"
                         id="uf"
+                        {...register("uf")}
                     />
                 </div>
 
@@ -73,24 +83,32 @@ export function FinishOrderSection() {
                     </div>
                 </div>
 
-                <PaymentMethod>
+                <Controller
+                    control={control}
+                    name="paymentMethod"
+                    render={(props) => {
 
-                    <PaymentMethodButton type="button" value="credit" >
-                        <CreditCard size={24} />
-                        Cartão de Crédito
-                    </PaymentMethodButton>
+                        return (
+                            <PaymentMethod onValueChange={props.field.onChange} value={props.field.value} >
+                                <PaymentMethodButton type="button" value="credit" >
+                                    <CreditCard size={24} />
+                                    Cartão de Crédito
+                                </PaymentMethodButton>
 
-                    <PaymentMethodButton type="button" value="debit" >
-                        <Bank size={24} />
-                        Cartão de Débito
-                    </PaymentMethodButton>
+                                <PaymentMethodButton type="button" value="debit" >
+                                    <Bank size={24} />
+                                    Cartão de Débito
+                                </PaymentMethodButton>
 
-                    <PaymentMethodButton type="button" value="cash" >
-                        <Money size={24} />
-                        Dinheiro
-                    </PaymentMethodButton>
+                                <PaymentMethodButton type="button" value="cash" >
+                                    <Money size={24} />
+                                    Dinheiro
+                                </PaymentMethodButton>
 
-                </PaymentMethod>
+                            </PaymentMethod>
+                        );
+                    }}
+                />
 
             </FinishOrderSectionBoxContainer>
 

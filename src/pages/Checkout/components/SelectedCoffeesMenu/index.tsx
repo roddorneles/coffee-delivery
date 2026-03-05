@@ -4,7 +4,9 @@ import { DeleteItemButton } from "../DeleteItemButton";
 import { OrderSummaryItem } from "../OrderSummaryItem";
 import { useContext } from "react";
 import { CartContext } from "../../../../contexts/CartContext";
+import { coffees } from "../../../Home/components/CoffeeMenu"; // lookup by id
 import { formatPrice } from "../../../../utils/formatPrice";
+import { useFormContext } from "react-hook-form";
 
 
 export function SelectedCoffeesMenu() {
@@ -12,7 +14,9 @@ export function SelectedCoffeesMenu() {
     const { coffeesInCart } = useContext(CartContext);
 
     const totalCoffeesPrice = coffeesInCart.reduce((acc, curr) => {
-        return (acc + (curr.coffee.price * curr.amount));
+        const coffee = coffees.find((c) => c.id === curr.coffeeId);
+        if (!coffee) return acc;
+        return acc + (coffee.price * curr.amount);
     }, 0)
 
     const deliveryPrice: number = 3.50;
@@ -25,9 +29,11 @@ export function SelectedCoffeesMenu() {
 
                 {
                     coffeesInCart.map((item) => {
+                        const coffee = coffees.find((c) => c.id === item.coffeeId);
+                        if (!coffee) return null;
                         return <OrderSummaryItem
-                            key={item.coffee.id}
-                            coffee={item.coffee}
+                            key={coffee.id}
+                            coffee={coffee}
                             amount={item.amount}
                         />
                     })

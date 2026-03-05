@@ -30,7 +30,8 @@ export function CoffeeCard({ coffee }: CoffeeCardProps) {
     }
 
     function handleAddCoffeToCart() {
-        addCoffeeToCart(coffee, amount);
+        // pass only the id now
+        addCoffeeToCart(id, amount);
         setAmount(1);
     }
 

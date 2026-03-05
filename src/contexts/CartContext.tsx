@@ -1,9 +1,8 @@
 import { Coffee } from "phosphor-react";
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { coffees } from "../pages/Home/components/CoffeeMenu";
+import { createContext, useEffect, useState, type ReactNode } from "react";
 
 export interface Coffee {
-    id: string
+    id: string,
     name: string,
     description: string,
     price: number,
@@ -12,13 +11,13 @@ export interface Coffee {
 }
 
 interface ItemInCartData {
-    coffee: Coffee,
+    coffeeId: string,
     amount: number
 }
 
 interface CartContextType {
     coffeesInCart: ItemInCartData[],
-    addCoffeeToCart: (coffee: Coffee, amount: number) => void,
+    addCoffeeToCart: (coffeeId: string, amount: number) => void,
     removeOneCoffeeFromCart: (coffeeId: string) => void,
     addOneCoffeeToCart: (coffeeId: string) => void
 }
@@ -41,21 +40,17 @@ export function CartContextProvider({ children }: CartContextProps) {
         setCoffeesInCart((items) => {
             return items.map((item) => {
 
-                if (item.coffee.id === coffeeId) {
+                if (item.coffeeId === coffeeId) {
 
                     if (item.amount <= 1) {
                         return {
-                            coffee: {
-                                ...item.coffee
-                            },
+                            coffeeId: item.coffeeId,
                             amount: 1
                         }
                     }
                     else {
                         return {
-                            coffee: {
-                                ...item.coffee
-                            },
+                            coffeeId: item.coffeeId,
                             amount: item.amount - 1
                         }
                     }
@@ -70,11 +65,9 @@ export function CartContextProvider({ children }: CartContextProps) {
         setCoffeesInCart((items) => {
             return items.map((item) => {
 
-                if (item.coffee.id === coffeeId) {
+                if (item.coffeeId === coffeeId) {
                     return {
-                        coffee: {
-                            ...item.coffee
-                        },
+                        coffeeId: item.coffeeId,
                         amount: item.amount + 1
                     }
                 }
@@ -83,24 +76,22 @@ export function CartContextProvider({ children }: CartContextProps) {
         });
     }
 
-    function addCoffeesToCart(newCoffee: Coffee, amount: number) {
+    function addCoffeeToCart(coffeeId: string, amount: number) {
 
-        const coffeeAddedId = coffeesInCart.findIndex((item) => item.coffee.id === newCoffee.id);
+        const coffeeAddedId = coffeesInCart.findIndex((item) => item.coffeeId === coffeeId);
 
         if (coffeeAddedId < 0) {
             setCoffeesInCart((items) => {
-                return [...items, { coffee: newCoffee, amount }]
+                return [...items, { coffeeId, amount }]
             })
         }
         else {
             setCoffeesInCart((items) => {
                 return items.map((item) => {
 
-                    if (item.coffee.id === newCoffee.id) {
+                    if (item.coffeeId === coffeeId) {
                         return {
-                            coffee: {
-                                ...item.coffee
-                            },
+                            coffeeId: item.coffeeId,
                             amount: item.amount + amount
                         }
                     }
@@ -112,7 +103,7 @@ export function CartContextProvider({ children }: CartContextProps) {
     }
 
     return (
-        <CartContext.Provider value={{ coffeesInCart, addCoffeeToCart: addCoffeesToCart, removeOneCoffeeFromCart, addOneCoffeeToCart }}>
+        <CartContext.Provider value={{ coffeesInCart, addCoffeeToCart, removeOneCoffeeFromCart, addOneCoffeeToCart }}>
             {children}
         </CartContext.Provider>
     )

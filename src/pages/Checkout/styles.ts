@@ -11,8 +11,13 @@ export const CheckoutContainer = styled.div`
         width: 100%;
         align-items: flex-start;
         
-        > * {             
-            flex: 1;
+        > :first-child {
+            flex: 3;
+            min-width: 0;
+        }
+
+        > :last-child {
+            flex: 2;
             min-width: 0;
         }
     }
