@@ -126,7 +126,7 @@ export function CoffeeMenu() {
             <CoffeesCatalogContainer>
                 {
                     coffees.map((coffee) => {
-                        return <CoffeeCard coffee={coffee} />
+                        return <CoffeeCard key={coffee.id} coffee={coffee} />
                     })
                 }
             </CoffeesCatalogContainer>

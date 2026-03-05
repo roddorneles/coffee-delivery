@@ -7,6 +7,7 @@ export const SelectedCoffeesMenuContainer = styled.div`
         font-weight: bold;
         font-size: 1.125rem;
         color: ${props => props.theme["base-subtitle"]};
+        margin-bottom: 0.75rem;
     }
 
 `
@@ -53,5 +54,28 @@ export const PricesInOrderSummaryLine = styled.div`
        font-size: 1.25rem;
        font-weight: bold;
     }
+
+`
+export const FinishOrderButton = styled.button`
+
+    width: 100%;
+    border: 0;
+    padding: 1rem;
+    border-radius: 6px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    gap: 0.5rem;
+    font-weight: bold;
+    font-size: 0.875rem;
+    cursor: pointer;
+
+    text-transform: uppercase;
+
+    background-color: ${props => props.theme["yellow"]};
+    color: white;
+
 
 `

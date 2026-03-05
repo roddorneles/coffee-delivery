@@ -1,4 +1,4 @@
-import { OrderSummary, PricesInOrderSummary, PricesInOrderSummaryLine, SelectedCoffeesMenuContainer } from "./style";
+import { FinishOrderButton, OrderSummary, PricesInOrderSummary, PricesInOrderSummaryLine, SelectedCoffeesMenuContainer } from "./style";
 import { InputNumber } from "../../../../components/InputNumber";
 import { DeleteItemButton } from "../DeleteItemButton";
 import { OrderSummaryItem } from "../OrderSummaryItem";
@@ -15,7 +15,7 @@ export function SelectedCoffeesMenu() {
         return (acc + (curr.coffee.price * curr.amount));
     }, 0)
 
-    const deliveryPrice = 3.50;
+    const deliveryPrice: number = 3.50;
 
     return (
         <SelectedCoffeesMenuContainer>
@@ -47,6 +47,10 @@ export function SelectedCoffeesMenu() {
                         <span>{`R$ ${formatPrice(totalCoffeesPrice + deliveryPrice)}`}</span>
                     </PricesInOrderSummaryLine>
                 </PricesInOrderSummary>
+
+                <FinishOrderButton type="submit">
+                    Confirmar pedido
+                </FinishOrderButton>
 
             </OrderSummary>
 

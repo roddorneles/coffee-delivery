@@ -12,13 +12,13 @@ export function InputNumber({ number, onMinus, onPlus }: InputNumberProps) {
     return (
         <InputNumberContainer>
 
-            <button onClick={onMinus}>
+            <button onClick={onMinus} type="button">
                 <Minus size={16} />
             </button>
 
             <span>{number}</span>
 
-            <button onClick={onPlus}>
+            <button onClick={onPlus} type="button">
                 <Plus size={16} />
             </button>
 
