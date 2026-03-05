@@ -27,6 +27,13 @@ export const OrderSummary = styled.div`
     border-top-left-radius: 6px;
     border-bottom-right-radius: 6px;
 
+    /* allow children to shrink and prevent horizontal overflow */
+    > * {
+        min-width: 0;
+    }
+
+    /* clip any accidental overflow so grey box always encloses content */
+    overflow: hidden;
 `
 
 

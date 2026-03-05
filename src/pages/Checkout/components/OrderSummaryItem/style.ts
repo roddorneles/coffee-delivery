@@ -14,15 +14,21 @@ export const OrderSummaryItemContainer = styled.div`
 
     border-bottom: 1px solid ${props => props.theme["base-button"]};
 
+    /* make this a full‑width, shrinkable flex item */
+    width: 100%;
+    min-width: 0;
+
     img {
         max-width: 4rem;
         max-height: 4rem;
+        flex-shrink: 0;
     }
 
     >.coffee-price{
         align-self: flex-start;
         font-weight: bold;
         color: ${props => props.theme["base-text"]};
+        flex-shrink: 0;
     }
 
 `
@@ -31,6 +37,7 @@ export const OrderSummaryItemAmountContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    min-width: 0;
 
     .buttons {
         display: flex;

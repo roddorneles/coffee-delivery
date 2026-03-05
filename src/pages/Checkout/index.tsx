@@ -36,7 +36,9 @@ export function Checkout() {
             return;
         }
 
-        console.log(data);
+        const payload = { ...data, items: coffeesInCart };
+        console.log(payload);
+
     }
 
     return (
