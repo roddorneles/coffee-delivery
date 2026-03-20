@@ -1,69 +1,61 @@
-# React + TypeScript + Vite
+# Coffee Delivery (React + TypeScript + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a learning app to practice advanced React with hooks. It simulates a coffee shop shopping experience with cart, checkout, and order confirmation.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Coffee menu with quantity selection
+- Add/edit/remove cart items
+- Subtotal, shipping, and total calculations
+- Checkout form (address and payment)
+- Form validation
+- Redirect to confirmed order page
 
-## Expanding the ESLint configuration
+## Project structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `src/pages/` (Home, Checkout, ConfirmedOrder)
+- `src/components/` (CartButton, Header, CoffeeCard, etc.)
+- `src/contexts/` (`CartContext`, `OrderContext`)
+- `src/lib/` (`viaCep`, `ibge` for CEP and IBGE lookup)
+- `src/utils/` (`formatPrice.ts`)
+- `src/styles/` (theme and global styles)
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Requirements
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- Node.js 18+ (or equivalent)
+- npm
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## How to run
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+From the project root, run:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. `npm i`
+2. `npm run dev`
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Then open the local URL shown in the terminal (typically `http://localhost:5173`).
+
+## Useful scripts
+
+- `npm run dev` - run development server
+- `npm run build` - create production build in `dist`
+- `npm run preview` - preview production build locally
+
+## Manual workflow to test
+
+1. Add coffees and quantity on the home page.
+2. Open cart and update/remove items.
+3. Go to checkout and enter CEP, address, and payment method.
+4. Submit and go to confirmation page.
+5. Refresh to confirm checkout state is kept separately (order is finalized).
+
+## React learning points
+
+- Hooks: `useState`, `useEffect`, `useContext`, `useReducer` (and possible `useCallback`)
+- Context API for cart/order state
+- Data validation and form logic
+- API integration with external services (`viaCep`, `ibge`)
+
+
+---
+
+Thanks for checking out the project!
