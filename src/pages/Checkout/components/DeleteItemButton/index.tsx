@@ -9,7 +9,7 @@ interface DeleteItemButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> 
 export function DeleteItemButton({ children, ...rest }: DeleteItemButtonProps) {
 
     return (
-        <DeleteItemButtonContainer {...rest}>
+        <DeleteItemButtonContainer {...rest} type="button" >
             <Trash size={16} />
             <span>REMOVER</span>
         </DeleteItemButtonContainer>

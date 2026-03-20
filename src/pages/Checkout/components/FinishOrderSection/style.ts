@@ -3,6 +3,8 @@ import { CurrencyDollar, MapPinLine } from "phosphor-react";
 import styled from "styled-components";
 import { IMaskInput } from "react-imask";
 import * as RadioGroup from "@radix-ui/react-radio-group";
+import * as Select from "@radix-ui/react-select";
+
 
 export const FinishOrderSectionContainer = styled.div`
 
@@ -170,5 +172,10 @@ export const PaymentMethodButton = styled(RadioGroup.Item)`
         background-color: ${props => props.theme["purple-light"]};
         border: 1px solid ${props => props.theme["purple"]};
     }
+
+`
+export const SelectRoot = styled(Select.Root)`
+
+
 
 `

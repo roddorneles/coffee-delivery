@@ -4,8 +4,9 @@ import { SelectedCoffeesMenu } from "./components/SelectedCoffeesMenu";
 import { CheckoutContainer } from "./styles";
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CartContext } from "../../contexts/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const cepRegex = /^\d{5}-?\d{3}$/;
 
@@ -26,23 +27,57 @@ type FinishOrderFormData = zod.infer<typeof finishOrderFormSchema>
 
 export function Checkout() {
 
-    const finishOrderForm = useForm({
-        resolver: zodResolver(finishOrderFormSchema)
+    const navigate = useNavigate();
+
+    const orderInfoStoredString = localStorage.getItem("order");
+    let defaultValuesInForm: FinishOrderFormData = {} as FinishOrderFormData;
+
+    if (orderInfoStoredString) {
+        const formsInfoStored = JSON.parse(orderInfoStoredString);
+
+        if (Date.now() - formsInfoStored.createdAt > 1000 * 60 * 60) {
+            localStorage.removeItem("order")
+        }
+
+        defaultValuesInForm = {
+            ...formsInfoStored.data,
+        }
+    }
+
+    const finishOrderForm = useForm<FinishOrderFormData>({
+        resolver: zodResolver(finishOrderFormSchema),
+        defaultValues: defaultValuesInForm
     });
 
-    const { coffeesInCart } = useContext(CartContext)
+    const { coffeesInCart, emptyCart } = useContext(CartContext);
     const { handleSubmit } = finishOrderForm;
 
     function handleFinishOrder(data: FinishOrderFormData) {
 
-        // if (coffeesInCart.length === 0) {
-        //     console.log("erro de carrinho")
-        //     return;
-        // }
+        localStorage.removeItem("order");
 
-        // const payload = { ...data, items: coffeesInCart };
-        console.log(data);
+        if (coffeesInCart.length === 0) {
+            console.log("erro de carrinho")
+            return;
+        }
 
+        const {
+            cep,
+            street,
+            number,
+            complement,
+            district,
+            city,
+            uf,
+            paymentMethod
+        } = data;
+
+        const address = { cep, street, number, complement, district, city, uf };
+
+        const payload = { address, items: coffeesInCart, paymentMethod };
+
+        emptyCart();
+        navigate("/confirmed-order", { state: payload });
     }
 
     return (

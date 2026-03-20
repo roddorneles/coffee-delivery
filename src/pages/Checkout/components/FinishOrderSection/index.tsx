@@ -1,33 +1,80 @@
 import { Bank, CreditCard, Money } from "phosphor-react";
 import { FinishOrderSectionBoxContainer, BaseInput, FinishOrderSectionContainer, PinIcon, CoinIcon, PaymentMethod, PaymentMethodButton, CepMaskedInput } from "./style";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { viaCepApi } from "../../../../lib/viaCep";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { SelectInputForm } from "../SelectInputForm";
+import { ibgeApi } from "../../../../lib/ibge";
+
+interface StateIbgeType {
+    sigla: string
+}
+
+interface CityIbgeType {
+    nome: string
+}
 
 export function FinishOrderSection() {
 
+    const [states, setStates] = useState<string[]>([]);
+    const [cities, setCities] = useState<string[]>([]);
+    const [pendingCity, setPendingCity] = useState<string | null>(null);
     const { register, control, watch, setValue } = useFormContext();
-    const cep = watch("cep");
+    const cep = useWatch({ name: "cep" });
+    const uf = watch("uf");
 
     useEffect(() => {
-        if (cep && cep.replace(/\D/g, '').length === 8) {
-            const timeout = setTimeout(() => {
-                findAddress();
-            }, 500);
-            return () => clearTimeout(timeout);
+
+        async function searchUf() {
+            const { data } = await ibgeApi.get("/estados");
+
+            const ufValues = data.map((state: StateIbgeType) => {
+                return state.sigla
+            });
+            setStates(ufValues);
         }
-    }, [cep])
+        searchUf();
+    }, []);
+
+    async function searchCities(localUf: string) {
+
+        if (!localUf || localUf === "") {
+            return [];
+        }
+
+        const { data } = await ibgeApi.get(`estados/${localUf}/municipios`);
+        const citiesValues = data.map((city: CityIbgeType) => {
+            return city.nome
+        });
+        setCities(citiesValues);
+
+        return citiesValues;
+    }
+
+    useEffect(() => {
+        searchCities(uf);
+    }, [uf]);
+
+    useEffect(() => {
+        if (pendingCity && cities.includes(pendingCity)) {
+            setValue("city", pendingCity);
+            setPendingCity(null);
+        }
+    }, [cities, pendingCity, setValue]);
 
     async function findAddress() {
+        if (!cep || cep && cep.replace(/\D/g, '').length !== 8) {
+            return;
+        }
 
         const { data } = await viaCepApi.get(`${cep}/json`);
 
-        const { bairro: district, uf, localidade: city, logradouro: street } = data;
+        const { bairro: district, uf: newUf, localidade: city, logradouro: street } = data;
 
         setValue("street", street);
         setValue("district", district);
-        setValue("city", city);
-        setValue("uf", uf);
+        setValue("uf", newUf);
+        setPendingCity(city);
     }
 
     return (
@@ -90,19 +137,33 @@ export function FinishOrderSection() {
                         {...register("district")}
                     />
 
-                    <BaseInput
-                        type="text"
-                        placeholder="Cidade"
-                        id="city"
-                        {...register("city")}
+                    <Controller
+                        name="uf"
+                        control={control}
+                        render={(props) => {
+                            return <SelectInputForm
+                                value={props.field.value}
+                                onChange={props.field.onChange}
+                                placeholder="UF"
+                                items={states}
+                            />
+                        }}
                     />
 
-                    <BaseInput
-                        type="text"
-                        placeholder="UF"
-                        id="uf"
-                        {...register("uf")}
+                    <Controller
+                        name="city"
+                        control={control}
+                        render={(props) => {
+                            return <SelectInputForm
+                                value={props.field.value}
+                                onChange={props.field.onChange}
+                                placeholder="Cidade"
+                                items={cities}
+                                disabled={!uf || uf === ""}
+                            />
+                        }}
                     />
+
                 </div>
 
             </FinishOrderSectionBoxContainer>
@@ -125,17 +186,17 @@ export function FinishOrderSection() {
                         return (
                             <PaymentMethod onValueChange={props.field.onChange} value={props.field.value} >
                                 <PaymentMethodButton type="button" value="credit" >
-                                    <CreditCard size={24} />
+                                    <CreditCard size={20} />
                                     Cartão de Crédito
                                 </PaymentMethodButton>
 
                                 <PaymentMethodButton type="button" value="debit" >
-                                    <Bank size={24} />
+                                    <Bank size={20} />
                                     Cartão de Débito
                                 </PaymentMethodButton>
 
                                 <PaymentMethodButton type="button" value="cash" >
-                                    <Money size={24} />
+                                    <Money size={20} />
                                     Dinheiro
                                 </PaymentMethodButton>
 

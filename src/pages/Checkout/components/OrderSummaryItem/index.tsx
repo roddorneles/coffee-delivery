@@ -12,7 +12,7 @@ interface OrderSummaryItemProps {
 
 export function OrderSummaryItem({ coffee, amount }: OrderSummaryItemProps) {
 
-    const { addOneCoffeeToCart, removeOneCoffeeFromCart, } = useContext(CartContext);
+    const { addOneCoffeeToCart, removeOneCoffeeFromCart, removeCoffeeTypeFromCart } = useContext(CartContext);
 
     const coffeeImage = new URL(`../../../../assets/${coffee.image}`, import.meta.url).href;
 
@@ -24,6 +24,10 @@ export function OrderSummaryItem({ coffee, amount }: OrderSummaryItemProps) {
         addOneCoffeeToCart(coffee.id);
     }
 
+    function removeCoffeType() {
+        removeCoffeeTypeFromCart(coffee.id);
+    }
+
     return (
         <OrderSummaryItemContainer>
             <img src={coffeeImage} alt="" />
@@ -31,7 +35,7 @@ export function OrderSummaryItem({ coffee, amount }: OrderSummaryItemProps) {
                 <span>{coffee.name}</span>
                 <div className="buttons">
                     <InputNumber number={amount} onMinus={removeCoffee} onPlus={addCoffee} />
-                    <DeleteItemButton />
+                    <DeleteItemButton onClick={removeCoffeType} />
                 </div>
             </OrderSummaryItemAmountContainer>
             <span className="coffee-price">R$  {formatPrice(coffee.price * amount)} </span>

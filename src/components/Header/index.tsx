@@ -20,10 +20,10 @@ export function Header() {
                 </NavLink>
 
                 <div>
-                    <LocationContainer>
+                    {/* <LocationContainer>
                         <MapPin size={24} weight="fill" />
                         <span>Porto Alegre, RS</span>
-                    </LocationContainer>
+                    </LocationContainer> */}
 
                     <NavLink to="/checkout" title="Checkout">
                         <CartButton $variant="yellow">

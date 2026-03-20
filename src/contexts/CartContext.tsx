@@ -19,7 +19,9 @@ interface CartContextType {
     coffeesInCart: ItemInCartData[],
     addCoffeeToCart: (coffeeId: string, amount: number) => void,
     removeOneCoffeeFromCart: (coffeeId: string) => void,
-    addOneCoffeeToCart: (coffeeId: string) => void
+    addOneCoffeeToCart: (coffeeId: string) => void,
+    emptyCart: () => void,
+    removeCoffeeTypeFromCart: (coffeeId: string) => void,
 }
 
 export const CartContext = createContext({} as CartContextType)
@@ -31,10 +33,6 @@ interface CartContextProps {
 export function CartContextProvider({ children }: CartContextProps) {
 
     const [coffeesInCart, setCoffeesInCart] = useState<ItemInCartData[]>([]);
-
-    useEffect(() => {
-        console.log(coffeesInCart)
-    }, [coffeesInCart]);
 
     function removeOneCoffeeFromCart(coffeeId: string) {
         setCoffeesInCart((items) => {
@@ -102,8 +100,18 @@ export function CartContextProvider({ children }: CartContextProps) {
 
     }
 
+    function removeCoffeeTypeFromCart(coffeeId: string) {
+        setCoffeesInCart((oldCoffeesList) => {
+            return oldCoffeesList.filter((coffee) => (coffee.coffeeId !== coffeeId))
+        })
+    }
+
+    function emptyCart() {
+        setCoffeesInCart([]);
+    }
+
     return (
-        <CartContext.Provider value={{ coffeesInCart, addCoffeeToCart, removeOneCoffeeFromCart, addOneCoffeeToCart }}>
+        <CartContext.Provider value={{ coffeesInCart, addCoffeeToCart, removeOneCoffeeFromCart, addOneCoffeeToCart, emptyCart, removeCoffeeTypeFromCart }}>
             {children}
         </CartContext.Provider>
     )
